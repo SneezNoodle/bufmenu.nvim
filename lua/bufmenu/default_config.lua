@@ -2,12 +2,12 @@ return {
 	use_default_keybinds = true,
 	keybinds = {
 		toggle_menu = "<A-f>",
-		refresh_buffers = "<F5>",
-		delete_selected_buffer = "d",
-		-- not implemented
-		open_selected_buffer = "<cr>", -- use winnr("#") to place buffer in last window
-		set_selected_as_alt = "<a-cr>", -- open buf then :b #
-
+		refresh_menu = "<F5>",
+		delete_selected = "x",
+		force_delete_selected = "X",
+		open_selected = "<cr>",
+		set_selected_as_altfile = "<a-cr>",
+		-- TODO save_selected = "<c-s>",
 	},
 	view = {
 		width = 0.6, -- decimal: fraction of container

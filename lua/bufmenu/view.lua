@@ -65,7 +65,7 @@ end
 
 function M.toggle_float(bufnr)
 	-- if a float is already open and contains the desired buffer
-	if float_id and api.nvim_win_get_buf(float_id) == bufnr then
+	if M.is_float_open(bufnr) then
 		close_float()
 	else
 		local success, id = pcall(open_float, bufnr)
@@ -76,8 +76,8 @@ function M.toggle_float(bufnr)
 	end
 end
 
-function M.float_open()
-	return float_id ~= nil
+function M.is_float_open(bufnr)
+	return float_id and api.nvim_win_get_buf(float_id) == bufnr
 end
 
 return M
