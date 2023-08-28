@@ -21,11 +21,11 @@ end
 local function cmd(cmdstr, errormsg, successmsg)
 	-- For some reason vim refuses to delete the current buffer if the float is open
 	local float_open = close_float()
-	local success, _ = pcall(vim.cmd, cmdstr)
+	local success, default_err = pcall(vim.cmd, cmdstr)
 	reopen_float(float_open)
 
 	if not success then
-		vim.notify(errormsg, vim.log.levels.ERROR)
+		vim.notify(errormsg or default_err, vim.log.levels.ERROR)
 	else
 		vim.notify(successmsg or "")
 	end
