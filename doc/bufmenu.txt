@@ -1,0 +1,11 @@
+*bufmenu.txt*	Very simple buffer menu plugin
+
+{brief explanation}
+
+{toc}
+
+{usage}
+
+{config}
+
+:helptags 
