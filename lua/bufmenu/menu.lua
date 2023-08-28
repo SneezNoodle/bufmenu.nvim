@@ -53,7 +53,7 @@ local function get_buffer_info_symbols(bufnr)
 	local symbols = {
 		status = vim_buf_info.hidden == 0 and cfg.symbols.active or cfg.symbols.hidden,
 		name = vim_buf_info.name == "" and "[No name]" or vim.fn.fnamemodify(vim_buf_info.name, ":~:."),
-		modified = vim_buf_info.modified == 1 and cfg.symbols.modified or "",
+		modified = (vim_buf_info.changed == 1) and cfg.symbols.modified or "",
 		linenr = vim_buf_info.lnum,
 		linecount = vim_buf_info.linecount,
 	}

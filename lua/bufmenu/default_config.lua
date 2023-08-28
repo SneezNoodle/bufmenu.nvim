@@ -32,7 +32,7 @@ return {
 			hidden = "",
 			active = "",
 
-			modified = "{+}",
+			modified = " {+}",
 
 			default_icon = "? " -- default filetype icon for nvim-web-devicons
 		},
