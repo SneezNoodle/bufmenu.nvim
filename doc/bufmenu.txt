@@ -1,4 +1,4 @@
-*bufmenu.txt*	Very simple buffer menu plugin
+*bufmenu.txt*    Very simple buffer menu plugin
 
 Author: Sneez <https://www.github.com/sneeznoodle>
 License: GPL V3
@@ -9,7 +9,7 @@ CONTENTS                                                   *bufmenu.contents*
 
     1. Introduction .................................. |bufmenu.introduction|
         1.1 Disclaimer .................................... |bufmenu.warning|
-		1.2 Usage ........................................... |bufmenu.usage|
+        1.2 Usage ........................................... |bufmenu.usage|
     2. Configuration ....................................... |bufmenu.config|
 
 ==============================================================================
@@ -34,31 +34,31 @@ To install, use pretty much any plugin manager or clone the repo to somewhere
 on your runtime path.
 For example, with Lazy.nvim:
 >lua
-	{
-		"sneeznoodle/bufmenu.nvim",
-		-- Optional, adds filetype icons
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		-- Example options
-		opts = {
-			view = {
-				width = 0.4,
-				height = 0.35,
-				relative_to_window = false,
-				border = "rounded",
-			},
-		},
-		-- Or if you don't want to change anything
-		config = true,
-	}
+    {
+        "sneeznoodle/bufmenu.nvim",
+        -- Optional, adds filetype icons
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        -- Example options
+        opts = {
+            view = {
+                width = 0.4,
+                height = 0.35,
+                relative_to_window = false,
+                border = "rounded",
+            },
+        },
+        -- Or if you don't want to change anything
+        config = true,
+    }
 <
 
 Initialise the plugin with:
 >lua
-	require("bufmenu").setup() -- Default settings
-	-- OR
-	require("bufmenu").setup {
-		-- Options
-	}
+    require("bufmenu").setup() -- Default settings
+    -- OR
+    require("bufmenu").setup {
+        -- Options
+    }
 <
 As for actual usage, it's fairly self explanatory. For default keybinds:
 Press alt-f to open or close the menu. Press enter to open the selected buffer,
@@ -79,93 +79,93 @@ See |bufmenu.config| for defaults and available options.
 2. Configuration                                             *bufmenu.config*
 Default configuration:
 >lua
-	{
-		-- Set to false to disable all default keybinds
-		use_default_keybinds = true,
-		-- Set a keybind to nil to disable it.
-		keybinds = {
-			-- Open the menu, or close if it's already open
-			toggle_menu = "<A-f>",
-			-- Manually refresh the contents of the menu
-			refresh_menu = "<F5>",
-			-- :bdel the selected buffer
-			delete_selected = "x",
-			-- :bdel! the selected buffer
-			force_delete_selected = "X",
-			-- Close the menu and switch to the selected buffer
-			open_selected = "<cr>",
-			-- Set the selected buffer as the alternate file
-			-- Does not close the menu
-			set_selected_as_altfile = "<a-cr>",
-		},
-		-- Options related to the popup float
-		view = {
-			-- The dimensions of the floating menu
-			-- < 1: percentage of container
-			-- > 1: fixed size
-			width = 0.6,
-			height = 0.5,
-			-- The position of the menu
-			-- < 0: centre of container
-			-- > 0: fixed position
-			row = -1,
-			col = -1,
-			-- Whether dimensions and position are relative to the active
-			-- window when the menu is opened or the entire screen
-			relative_to_window = true,
-			-- See :h nvim_open_win() for possible values
-			border = "single",
-			title = "Buffer menu",
-			title_pos = "center",
-			-- Highlight group overrides for the menu (see :h 'winhighlight')
-			winhighlight = {
-				-- With default nvim colorscheme, add:
+    {
+        -- Set to false to disable all default keybinds
+        use_default_keybinds = true,
+        -- Set a keybind to nil to disable it.
+        keybinds = {
+            -- Open the menu, or close if it's already open
+            toggle_menu = "<A-f>",
+            -- Manually refresh the contents of the menu
+            refresh_menu = "<F5>",
+            -- :bdel the selected buffer
+            delete_selected = "x",
+            -- :bdel! the selected buffer
+            force_delete_selected = "X",
+            -- Close the menu and switch to the selected buffer
+            open_selected = "<cr>",
+            -- Set the selected buffer as the alternate file
+            -- Does not close the menu
+            set_selected_as_altfile = "<a-cr>",
+        },
+        -- Options related to the popup float
+        view = {
+            -- The dimensions of the floating menu
+            -- < 1: percentage of container
+            -- > 1: fixed size
+            width = 0.6,
+            height = 0.5,
+            -- The position of the menu
+            -- < 0: centre of container
+            -- > 0: fixed position
+            row = -1,
+            col = -1,
+            -- Whether dimensions and position are relative to the active
+            -- window when the menu is opened or the entire screen
+            relative_to_window = true,
+            -- See :h nvim_open_win() for possible values
+            border = "single",
+            title = "Buffer menu",
+            title_pos = "center",
+            -- Highlight group overrides for the menu (see :h 'winhighlight')
+            winhighlight = {
+                -- With default nvim colorscheme, add:
 
-				-- "NormalFloat:Normal"
+                -- "NormalFloat:Normal"
 
-				-- Or the buffer names will be the same color as the
-				-- background
-			},
-		},
-		-- Options related to the contents of the menu
-		menu = {
-			-- The name of the unlisted buffer containing the menu
-			-- Change if for some reason it conflicts with another plugin
-			menu_buffer_name = "Bufmenu",
-			-- The filetype of the menu buffer
-			menu_buffer_filetype = "bufmenu",
+                -- Or the buffer names will be the same color as the
+                -- background
+            },
+        },
+        -- Options related to the contents of the menu
+        menu = {
+            -- The name of the unlisted buffer containing the menu
+            -- Change if for some reason it conflicts with another plugin
+            menu_buffer_name = "Bufmenu",
+            -- The filetype of the menu buffer
+            menu_buffer_filetype = "bufmenu",
 
-			symbols = {
-				-- The symbols used to represent shown and hidden buffers
-				hidden = "",
-				active = "",
+            symbols = {
+                -- The symbols used to represent shown and hidden buffers
+                hidden = "",
+                active = "",
 
-				-- Appended to the buffer name if it contains unsaved changes
-				-- Note the leading space
-				modified = " {+}",
+                -- Appended to the buffer name if it contains unsaved changes
+                -- Note the leading space
+                modified = " {+}",
 
-				-- Used for filetypes not recognised by nvim-web-devicons
-				default_icon = "? "
-			},
-			-- Highlight group names or values for different parts of the menu
-			-- Can be a string (name of hl group to link to) or a table
-			-- (See :h nvim_set_hl, specifically the {val} argument)
-			highlights = {
-				-- The active/hidden icon and the buffer number
-				-- Horrible name, sorry
-				buffer_status = "Title",
-				-- The position in the buffer
-				buffer_position = "Question",
-				-- The name of the buffer, including the modified icon
-				buffer_name = "String",
-			},
+                -- Used for filetypes not recognised by nvim-web-devicons
+                default_icon = "? "
+            },
+            -- Highlight group names or values for different parts of the menu
+            -- Can be a string (name of hl group to link to) or a table
+            -- (See :h nvim_set_hl, specifically the {val} argument)
+            highlights = {
+                -- The active/hidden icon and the buffer number
+                -- Horrible name, sorry
+                buffer_status = "Title",
+                -- The position in the buffer
+                buffer_position = "Question",
+                -- The name of the buffer, including the modified icon
+                buffer_name = "String",
+            },
 
-			-- Returns true if [bufnr] should appear on the menu
-			filter = function(bufnr)
-				return true
-			end,
-		},
-	}
+            -- Returns true if [bufnr] should appear on the menu
+            filter = function(bufnr)
+                return true
+            end,
+        },
+    }
 <
 
-vim:tw=78:ft=help
+vim:tw=78:ft=help:expandtab:tabstop=4:shiftwidth=4
