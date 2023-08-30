@@ -1,7 +1,7 @@
 *bufmenu.txt*	Very simple buffer menu plugin
 
 Author: Sneez <https://www.github.com/sneeznoodle>
-License: ???
+License: GPL V3
     (Although I don't think most people would want to claim this code)
 
 ==============================================================================
