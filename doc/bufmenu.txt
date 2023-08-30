@@ -60,6 +60,10 @@ Initialise the plugin with:
 		-- Options
 	}
 <
+As for actual usage, it's fairly self explanatory. For default keybinds:
+Press alt-f to open or close the menu. Press enter to open the selected buffer,
+x to delete it, and X to discard changes.
+
 See |bufmenu.config| for defaults and available options.
 
 ==============================================================================
