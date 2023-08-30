@@ -1,6 +1,6 @@
 # Bufmenu.nvim
 A simple plugin that allows for quicker buffer management with a little visual menu. Keep in mind that this is my first plugin so while I did try to make it decent it is probably not as good as the alternatives.
-![There it is!](https://www.github.com/SneezNoodle/bufmenu.nvim/blob/main/images/thereitis.png?raw=true)
+![There it is!](https://raw.githubusercontent.com/SneezNoodle/bufmenu.nvim/main/images/thereitis.png)
 
 ## Installation
 Can be installed either using a plugin manager, such as [lazy.nvim](https://github.com/folke/lazy.nvim):
