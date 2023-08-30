@@ -64,7 +64,7 @@ See |bufmenu.config| for defaults and available options.
 
 ==============================================================================
 2. Configuration                                             *bufmenu.config*
-Defaul configuration:
+Default configuration:
 >lua
 	{
 		-- Set to false to disable all default keybinds
@@ -92,7 +92,7 @@ Defaul configuration:
 			-- > 1: fixed size
 			width = 0.6,
 			height = 0.5,
-			-- The posiiton of the menu
+			-- The position of the menu
 			-- < 0: centre of container
 			-- > 0: fixed position
 			row = -1,
