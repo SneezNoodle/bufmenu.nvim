@@ -64,6 +64,15 @@ As for actual usage, it's fairly self explanatory. For default keybinds:
 Press alt-f to open or close the menu. Press enter to open the selected buffer,
 x to delete it, and X to discard changes.
 
+As for the visual information:
+The first column (by default the little dots) indicates whether a buffer is
+open in any windows or not (the dot is empty if the buffer is hidden).
+The second column is the buffer number.
+Next is the position in the buffer, in the form [current line]/[total lines].
+Then the filetype icon and buffer name, and finally by an icon indicating
+whether the buffer contains unsaved changes (`{+}` by default).
+
+
 See |bufmenu.config| for defaults and available options.
 
 ==============================================================================
