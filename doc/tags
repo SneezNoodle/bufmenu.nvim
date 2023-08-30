@@ -1,0 +1,6 @@
+bufmenu.config	bufmenu.txt	/*bufmenu.config*
+bufmenu.contents	bufmenu.txt	/*bufmenu.contents*
+bufmenu.introduction	bufmenu.txt	/*bufmenu.introduction*
+bufmenu.txt	bufmenu.txt	/*bufmenu.txt*
+bufmenu.usage	bufmenu.txt	/*bufmenu.usage*
+bufmenu.warning	bufmenu.txt	/*bufmenu.warning*
