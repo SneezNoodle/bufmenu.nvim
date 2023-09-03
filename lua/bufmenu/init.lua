@@ -5,65 +5,7 @@ local config = require("bufmenu.default_config")
 local M = {}
 
 -- Locals
-local function count_or(default)
-	local count = vim.v.count
-	if count ~= 0 then
-		return count
-	end
-	return default
-end
-
-local function set_keybinds()
-	local actions = {
-		toggle_menu = {
-			mode = "n",
-			opts = { desc = "Bufmenu: Toggle floating menu" },
-			lhs = function() M.float_toggle() end,
-		},
-		refresh_menu = {
-			mode = "n",
-			opts = { desc = "Bufmenu: Toggle floating menu" },
-			lhs = function() M.refresh_menu() end
-		},
-		delete_selected = {
-			mode = "n",
-			opts = { desc = "Bufmenu: Delete selected buffer" },
-			lhs = config.use_bdelete and function()
-				M.bdelete_selected_buf(false)
-			end or function()
-				M.delete_selected_buf(false)
-			end,
-
-		},
-		force_delete_selected = {
-			mode = "n",
-			opts = { desc = "Bufmenu: Forcefully delete selected buffer" },
-			lhs = config.use_bdelete and function()
-				M.bdelete_selected_buf(true)
-			end or function()
-				M.delete_selected_buf(true)
-			end,
-		},
-		open_selected = {
-			mode = "n",
-			opts = { desc = "Bufmenu: Open selected" },
-			lhs = function()
-				-- Close floating menu if open
-				if M.float_is_open() then M.float_toggle() end
-				-- Use count as winnr, or previous window if none is given
-				M.open_selected_buf(vim.fn.win_getid(count_or(vim.fn.winnr("#"))))
-			end,
-		},
-		set_selected_as_altfile = {
-			mode = "n",
-			opts = { desc = "Bufmenu: Set selected as alt file" },
-			lhs = function()
-				-- Use count as winnr, or previous window if none is given
-				M.set_selected_as_alt(vim.fn.win_getid(count_or(vim.fn.winnr("#"))))
-			end,
-		},
-	}
-
+local function set_keybinds(actions)
 	for action_name, keycode in pairs(config.keybinds) do
 		local action = actions[action_name]
 		if action and keycode then
@@ -74,15 +16,22 @@ local function set_keybinds()
 	end
 end
 
-local function get_fallback_buffer()
+local function replace_buffer_in_layout(bufnr)
+	-- Search for a listed and loaded buffer as a fallback
 	local fallback = nil
 	for _, buf in ipairs(api.nvim_list_bufs()) do
-		if api.nvim_buf_get_option(buf, "buflisted") then
+		if api.nvim_buf_get_option(buf, "buflisted") and api.nvim_buf_is_loaded(buf) then
 			fallback = buf
 			break
 		end
 	end
-	return fallback or api.nvim_create_buf(true, false)
+	-- If none is found, create a scratch buffer
+	fallback = fallback or api.nvim_create_buf(true, true)
+
+	-- Replace bufnr with the fallback
+	for _, win in ipairs(vim.fn.win_findbuf(bufnr) or {}) do
+		api.nvim_win_set_buf(win, fallback)
+	end
 end
 
 -- Export
@@ -94,7 +43,7 @@ function M.setup(opts)
 	menu.setup(config.menu)
 	view.setup(config.view)
 
-	set_keybinds()
+	set_keybinds(require("bufmenu.actions").get(config))
 end
 
 -- API
@@ -119,13 +68,16 @@ end
 
 function M.open_selected_buf(winid)
 	winid = winid or 0
+	if not api.nvim_win_is_valid(winid) then return false end
 
 	vim.api.nvim_win_set_buf(winid, M.get_selected_bufnr())
 	M.refresh_menu()
+	return true
 end
 
 function M.set_selected_as_alt(winid)
 	winid = winid or 0
+	if not api.nvim_win_is_valid(winid) then return false end
 
 	local selected_buf = M.get_selected_bufnr()
 	local current_buf = api.nvim_win_get_buf(winid)
@@ -133,6 +85,7 @@ function M.set_selected_as_alt(winid)
 	api.nvim_win_set_buf(winid, selected_buf)
 	api.nvim_win_set_buf(winid, current_buf)
 	M.refresh_menu()
+	return true
 end
 
 function M.delete_selected_buf(force)
@@ -144,11 +97,9 @@ function M.delete_selected_buf(force)
 		return false
 	end
 
-	api.nvim_buf_set_option(selected_buf, "buflisted", false)
 	-- Set all windows containing the deleted buffer to a fallback buffer
-	for _, win in ipairs(vim.fn.win_findbuf(selected_buf) or {}) do
-		api.nvim_win_set_buf(win, get_fallback_buffer())
-	end
+	api.nvim_buf_set_option(selected_buf, "buflisted", false)
+	replace_buffer_in_layout(selected_buf)
 
 	M.refresh_menu()
 	return true
@@ -156,13 +107,8 @@ end
 
 function M.bdelete_selected_buf(force)
 	local selected_buf = M.get_selected_bufnr()
-	local menu_winid = vim.fn.win_getid()
 
-	-- Switch to previous window (bdel sometimes breaks when the float is open)
-	api.nvim_set_current_win(vim.fn.win_getid(vim.fn.winnr("#")))
-	vim.cmd("bdelete" .. (force and "! " or " ") .. selected_buf)
-	api.nvim_set_current_win(menu_winid)
-
+	vim.cmd("silent bdelete" .. (force and "! " or " ") .. selected_buf)
 	M.refresh_menu()
 end
 
