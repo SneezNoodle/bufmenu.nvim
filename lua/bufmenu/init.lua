@@ -68,7 +68,8 @@ end
 
 function M.open_selected_buf(winid)
 	winid = winid or 0
-	if not api.nvim_win_is_valid(winid) then return false end
+	local selected_buf = M.get_selected_bufnr()
+	if not api.nvim_win_is_valid(winid) or selected_buf == -1 then return false end
 
 	vim.api.nvim_win_set_buf(winid, M.get_selected_bufnr())
 	M.refresh_menu()

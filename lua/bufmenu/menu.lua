@@ -144,7 +144,7 @@ function M.get_selected_bufnr()
 	if vim.fn.bufnr() ~= menubufnr then
 		return -1
 	end
-	return displayed_buffers[vim.fn.line(".")]
+	return displayed_buffers[vim.fn.line(".")] or -1
 end
 
 return M

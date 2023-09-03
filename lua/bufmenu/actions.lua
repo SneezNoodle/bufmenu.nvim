@@ -45,10 +45,12 @@ function M.get(config)
 			mode = "n",
 			opts = { desc = "Bufmenu: Open selected" },
 			lhs = function()
-				-- Close floating menu if open
-				if bufmenu_api.float_is_open() then M.float_toggle() end
 				-- Use count as winnr, or previous window if none is given
 				bufmenu_api.open_selected_buf(vim.fn.win_getid(count_or(vim.fn.winnr("#"))))
+				-- Close floating menu if open and no count was provided
+				if bufmenu_api.float_is_open() and vim.v.count == 0 then
+					bufmenu_api.float_toggle()
+				end
 			end,
 		},
 		set_selected_as_altfile = {
