@@ -1,5 +1,7 @@
+bufmenu.api	bufmenu.txt	/*bufmenu.api*
 bufmenu.config	bufmenu.txt	/*bufmenu.config*
 bufmenu.contents	bufmenu.txt	/*bufmenu.contents*
+bufmenu.deletion	bufmenu.txt	/*bufmenu.deletion*
 bufmenu.introduction	bufmenu.txt	/*bufmenu.introduction*
 bufmenu.txt	bufmenu.txt	/*bufmenu.txt*
 bufmenu.usage	bufmenu.txt	/*bufmenu.usage*

@@ -11,10 +11,12 @@ CONTENTS                                                   *bufmenu.contents*
         1.1 Disclaimer .................................... |bufmenu.warning|
         1.2 Usage ........................................... |bufmenu.usage|
     2. Configuration ....................................... |bufmenu.config|
+        2.1 Deletion methods ............................. |bufmenu.deletion|
+    3. API .................................................... |bufmenu.api|
 
 ==============================================================================
 1. Introduction                                        *bufmenu.introduction*
-This plugin is basically like an interactive version of |:ls| with slightly
+This plugin is basically like an interactive version of :ls with slightly
 less information and (hopefully) slightly prettier presentation. The goal is
 to replace the usual experience of ":ls, forget buffer number, :ls again, then
 run another command" with a simple menu that you can open and close buffers
@@ -60,9 +62,21 @@ Initialise the plugin with:
         -- Options
     }
 <
-As for actual usage, it's fairly self explanatory. For default keybinds:
-Press alt-f to open or close the menu. Press enter to open the selected buffer,
-x to delete it, and X to discard changes.
+For default keybinds:
+<A-f> to open or close the menu.
+<F5> to manually refresh the menu (most actions, including opening the menu,
+        do this automatically).
+<cr> to open the selected buffer in the previous window and close the menu.
+{count}<cr> to open the selected buffer in the window with win number {count}.
+        Leaves the menu open.
+<A-cr> to set the selected buffer as the |alternate-file| for the previous
+        window.
+{count}<A-cr> to set the selected buffer as the |alternate-file| for the
+        window with win number {count}.
+x to delete the selected buffer.
+X to forcefully delete the selected buffer (discard changes).
+
+The method used for deleting buffers can be changed (see |bufmenu.config|).
 
 As for the visual information:
 The first column (by default the little dots) indicates whether a buffer is
@@ -82,15 +96,19 @@ Default configuration:
     {
         -- Set to false to disable all default keybinds
         use_default_keybinds = true,
+        -- Delete buffers with the :bdelete[!] command
+        -- When off, use a custom deletion method that preserves window layout
+        -- See 2.1 for more details
+        use_bdelete = true,
         -- Set a keybind to nil to disable it.
         keybinds = {
             -- Open the menu, or close if it's already open
             toggle_menu = "<A-f>",
             -- Manually refresh the contents of the menu
             refresh_menu = "<F5>",
-            -- :bdel the selected buffer
+            -- Delete the selected buffer
             delete_selected = "x",
-            -- :bdel! the selected buffer
+            -- Force delete the selected buffer (discard changes)
             force_delete_selected = "X",
             -- Close the menu and switch to the selected buffer
             open_selected = "<cr>",
@@ -166,6 +184,67 @@ Default configuration:
             end,
         },
     }
-<
+
+-------------------------------------------------------------------------------
+2.1 Deletion methods                                       *bufmenu.deletion*
+There are two ways to delete buffers with this plugin: the :bdelete command or
+a new, custom method. The :bdelete command closes any windows containing the
+deleted buffer, which messes up your window layout if you had changed it at
+all. The new method just unloads and unlists the buffer (same as the command),
+then sets all windows containing the deleted buffer to another buffer (or
+creates a scratch buffer if the deleted buffer was the last one).
+
+TL DR; :bdelete messes with your window layout but might be more stable.
+
+==============================================================================
+3. API                                                          *bufmenu.api*
+Bufmenu now exposes a sort of API! This basically just means you can call the
+functions that the mappings use from the "bufmenu" module. The main thing to
+note is that functions with "selected" or "selected_buf" in their name will
+fail if the menu is not focused.
+
+float_toggle()
+    Toggles the floating menu
+    Returns true if the menu was opened, false if it was closed
+
+float_is_open()
+    Returns true if the floating menu is currently open
+
+get_selected_bufnr()
+    Returns the buffer number of the selected buffer, or -1 if the menu is not
+    focused
+
+refresh_menu()
+    Refreshes the menu buffer, whether it is visible or not
+	
+open_selected_buf({winid})
+    Opens the selected buffer in the window given by {winid}
+    Returns false if {winid} is not valid or if menu is not focused, otherwise
+    true
+
+set_selected_as_alt({winid})
+    Opens the selected buffer in the window given by {winid} and then switches
+    back to the previous buffer, effectively setting the window's
+    |alternate-file|
+    Returns false if {winid} is not valid or if menu is not focused, otherwise
+    true
+
+delete_selected_buf({force})
+    Deletes the selected buffer and makes all windows previously containing it
+    instead contain a fallback buffer (currently either the first loaded and
+    listed buffer, or a scratch buffer if none is found)
+    Discards changes if {force} is true, otherwise fails on modified buffers
+    Returns true if the buffer was successfully found and deleted, otherwise
+    false
+    Prints an error message if deletion fails
+
+bdelete_selected_buf({force})
+    Deletes the selected buffer with :bdelete (or :bdelete! if {force} is true)
+    Closes the menu before while :bdelete to allow deletion of the open buffer
+    (the command fails without error otherwise, possibly due to trying to
+    close the window that the menu is relative to)
+    Returns true if the buffer was successfully found and deleted, otherwise
+    false
+    Prints an error message if deletion fails
 
 vim:tw=78:ft=help:expandtab:tabstop=4:shiftwidth=4
