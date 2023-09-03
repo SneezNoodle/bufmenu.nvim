@@ -22,8 +22,8 @@ local function get_float_rect(container_dims)
 end
 local function open_float(bufnr)
 	local container_dims = {
-		width = (cfg.relative_to_window) and vim.fn.winwidth(0) or vim.o.cols,
-		height = (cfg.relative_to_window) and vim.fn.winheight(0) or vim.o.rows,
+		width = (cfg.relative_to_window) and vim.fn.winwidth(0) or vim.o.columns,
+		height = (cfg.relative_to_window) and vim.fn.winheight(0) or vim.o.lines,
 	}
 	local rect = get_float_rect(container_dims)
 
@@ -64,12 +64,12 @@ function M.setup(opts)
 end
 
 function M.toggle_float(bufnr)
-	-- if a float is already open and contains the desired buffer
+	-- close float already open and containing the desired buffer
 	if M.is_float_open(bufnr) then
 		close_float()
 	else
-		local success, id = pcall(open_float, bufnr)
-		if success then
+		local float_opened, id = pcall(open_float, bufnr)
+		if float_opened then
 			float_id = id
 			set_local_options()
 		end
