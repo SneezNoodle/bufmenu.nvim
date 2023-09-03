@@ -78,10 +78,10 @@ end
 
 function M.set_selected_as_alt(winid)
 	winid = winid or 0
-	if not api.nvim_win_is_valid(winid) then return false end
-
 	local selected_buf = M.get_selected_bufnr()
 	local current_buf = api.nvim_win_get_buf(winid)
+
+	if not api.nvim_win_is_valid(winid) or selected_buf == -1 then return false end
 
 	api.nvim_win_set_buf(winid, selected_buf)
 	api.nvim_win_set_buf(winid, current_buf)
@@ -91,6 +91,7 @@ end
 
 function M.delete_selected_buf(force)
 	local selected_buf = M.get_selected_bufnr()
+	if selected_buf == -1 then return false end
 
 	local unloaded, error = pcall(api.nvim_buf_delete, selected_buf, { force = force, unload = true })
 	if not unloaded and error then
@@ -108,6 +109,7 @@ end
 
 function M.bdelete_selected_buf(force)
 	local selected_buf = M.get_selected_bufnr()
+	if selected_buf == -1 then return false end
 
 	vim.cmd("silent bdelete" .. (force and "! " or " ") .. selected_buf)
 	M.refresh_menu()
