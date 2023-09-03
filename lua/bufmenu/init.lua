@@ -111,8 +111,18 @@ function M.bdelete_selected_buf(force)
 	local selected_buf = M.get_selected_bufnr()
 	if selected_buf == -1 then return false end
 
-	vim.cmd("silent bdelete" .. (force and "! " or " ") .. selected_buf)
+	-- :bdelete fails to delete the current buffer with the menu open
+	local float_open = M.float_is_open()
+	if float_open then M.float_toggle() end
+	local deleted, error = pcall(vim.cmd, "silent bdelete" .. (force and "! " or " ") .. selected_buf)
+	if float_open then M.float_toggle() end
+
+	if not deleted and error then
+		vim.notify(error, vim.log.levels.ERROR)
+	end
+
 	M.refresh_menu()
+	return deleted
 end
 
 return M
