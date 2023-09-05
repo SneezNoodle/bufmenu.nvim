@@ -11,7 +11,7 @@ local function count_or(default)
 end
 
 -- Export
-function M.get(config)
+function M.get(config, menubufnr)
 	return {
 		toggle_menu = {
 			mode = "n",
@@ -25,7 +25,7 @@ function M.get(config)
 		},
 		delete_selected = {
 			mode = "n",
-			opts = { desc = "Bufmenu: Delete selected buffer" },
+			opts = { desc = "Bufmenu: Delete selected buffer", buffer = menubufnr },
 			lhs = config.use_bdelete and function()
 				bufmenu_api.bdelete_selected_buf(false)
 				end or function()
@@ -34,7 +34,7 @@ function M.get(config)
 		},
 		force_delete_selected = {
 			mode = "n",
-			opts = { desc = "Bufmenu: Forcefully delete selected buffer" },
+			opts = { desc = "Bufmenu: Forcefully delete selected buffer", buffer = menubufnr },
 			lhs = config.use_bdelete and function()
 				bufmenu_api.bdelete_selected_buf(true)
 				end or function()
@@ -43,7 +43,7 @@ function M.get(config)
 		},
 		open_selected = {
 			mode = "n",
-			opts = { desc = "Bufmenu: Open selected" },
+			opts = { desc = "Bufmenu: Open selected", buffer = menubufnr },
 			lhs = function()
 				-- Use count as winnr, or previous window if none is given
 				bufmenu_api.open_selected_buf(vim.fn.win_getid(count_or(vim.fn.winnr("#"))))
@@ -55,7 +55,7 @@ function M.get(config)
 		},
 		set_selected_as_altfile = {
 			mode = "n",
-			opts = { desc = "Bufmenu: Set selected as alt file" },
+			opts = { desc = "Bufmenu: Set selected as alt file", buffer = menubufnr },
 			lhs = function()
 				-- Use count as winnr, or previous window if none is given
 				bufmenu_api.set_selected_as_alt(vim.fn.win_getid(count_or(vim.fn.winnr("#"))))

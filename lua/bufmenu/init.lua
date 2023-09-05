@@ -43,7 +43,7 @@ function M.setup(opts)
 	menu.setup(config.menu)
 	view.setup(config.view)
 
-	set_keybinds(require("bufmenu.actions").get(config))
+	set_keybinds(require("bufmenu.actions").get(config, menu.get_menu_bufnr()))
 end
 
 -- API
