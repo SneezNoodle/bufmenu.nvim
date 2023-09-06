@@ -9,7 +9,10 @@ local function set_keybinds(actions)
 	for action_name, keycode in pairs(config.keybinds) do
 		local action = actions[action_name]
 		if action and keycode then
-			vim.keymap.set(action.mode, keycode, action.lhs, action.opts)
+			vim.keymap.set(action.mode, keycode, action.rhs, {
+				desc = action.desc,
+				buffer = action.menu_only and menu.get_menu_bufnr() or nil
+			})
 		elseif keycode then -- No action with action_name
 			vim.fn.notify(string.format("Bufmenu: Unknown keybind '%s'"), vim.log.levels.WARN)
 		end
@@ -43,7 +46,7 @@ function M.setup(opts)
 	menu.setup(config.menu)
 	view.setup(config.view)
 
-	set_keybinds(require("bufmenu.actions").get(config, menu.get_menu_bufnr()))
+	set_keybinds(require("bufmenu.actions").get(config))
 end
 
 -- API
