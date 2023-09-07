@@ -1,4 +1,4 @@
-local bufmenu_api = require("bufmenu")
+local bufmenu_api
 local M = {}
 
 -- Locals
@@ -11,7 +11,7 @@ local function count_or(default)
 end
 
 -- Export
-M.actions = {
+M.list = {
 	toggle_menu = {
 		mode = "n",
 		desc = "Bufmenu: Toggle floating menu",
@@ -63,11 +63,12 @@ M.actions = {
 }
 
 function M.setup(config)
+	bufmenu_api = require("bufmenu")
 	if config.use_bdelete then
-		M.actions.delete_selected.rhs = function()
+		M.list.delete_selected.rhs = function()
 			bufmenu_api.bdelete_selected_buf(false)
 		end
-		M.actions.force_delete_selected.rhs = function()
+		M.list.force_delete_selected.rhs = function()
 			bufmenu_api.bdelete_selected_buf(true)
 		end
 	end

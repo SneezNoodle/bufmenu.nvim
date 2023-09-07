@@ -2,6 +2,7 @@ local api = vim.api
 local menu = require("bufmenu.menu")
 local view = require("bufmenu.view")
 local config = require("bufmenu.default_config")
+local actions = require("bufmenu.actions")
 local M = {}
 
 -- Locals
@@ -45,8 +46,9 @@ function M.setup(opts)
 
 	menu.setup(config.menu)
 	view.setup(config.view)
+	actions.setup(config)
 
-	set_keybinds(require("bufmenu.actions").get(config))
+	set_keybinds(actions.list)
 end
 
 -- API
