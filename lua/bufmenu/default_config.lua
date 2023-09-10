@@ -1,5 +1,6 @@
 return {
 	use_default_keybinds = true,
+	use_bdelete = true,
 	keybinds = {
 		toggle_menu = "<A-f>",
 		refresh_menu = "<F5>",
